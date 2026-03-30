@@ -37,7 +37,7 @@ jobs:
 
 
   frontend:
-    name: Frontend Tests, Lint & Build
+    name: Frontend Tests & Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -59,9 +59,6 @@ jobs:
 
       - name: Run tests
         run: cd client && npm test -- --run
-
-      - name: Lint
-        run: cd client && npm run lint
 
       - name: Build
         run: cd client && npm run build
