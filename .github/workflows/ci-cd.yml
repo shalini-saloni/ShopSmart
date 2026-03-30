@@ -7,102 +7,63 @@ on:
     branches: [ main, develop ]
 
 jobs:
+
   backend:
     name: Backend Tests & Lint
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js ${{ matrix.node-version }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: server/package-lock.json
-      
-      - name: Install server dependencies
+
+      - name: Install dependencies
         run: cd server && npm ci
-      
-      - name: Run server tests
+
+      - name: Run tests
         run: cd server && npm test
-      
-      - name: Lint server code
+
+      - name: Lint
         run: cd server && npm run lint
-        continue-on-error: true
+
 
   frontend:
-    name: Frontend Tests & Lint
+    name: Frontend Tests, Lint & Build
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js ${{ matrix.node-version }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: client/package-lock.json
-      
-      - name: Install client dependencies
+
+      - name: Install dependencies
         run: cd client && npm ci
-      
-      - name: Run client tests
+
+      - name: Run tests
         run: cd client && npm test -- --run
-      
-      - name: Lint client code
+
+      - name: Lint
         run: cd client && npm run lint
-      
-      - name: Build client
+
+      - name: Build
         run: cd client && npm run build
 
-  docker-build:
-    name: Build Docker Images
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build backend Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./server
-          file: ./server/Dockerfile
-          push: false
-          tags: shopsmart-backend:latest
-      
-      - name: Build frontend Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./client
-          file: ./client/Dockerfile
-          push: false
-          tags: shopsmart-frontend:latest
-
-  tests-passed:
-    name: All Tests Passed
-    needs: [backend, frontend]
-    runs-on: ubuntu-latest
-    if: always()
-    
-    steps:
-      - name: Decide whether tests passed
-        run: |
-          if [[ "${{ needs.backend.result }}" == "failure" || "${{ needs.frontend.result }}" == "failure" ]]; then
-            echo "Some tests failed"
-            exit 1
-          fi
-          echo "All tests passed"
+  
