@@ -1,0 +1,42 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install Dependencies
+      run: |
+        cd server && npm install
+        cd ../client && npm install
+        
+    - name: PR Checks (Linting)
+      run: |
+        cd server && npm run lint
+        cd ../client && npm run lint
+        
+    - name: Run Backend Tests
+      run: cd server && npm test
+      
+    - name: Build Frontend
+      run: cd client && npm run build
+      
+    - name: Run Frontend Tests
+      run: cd client && npm run test -- --run
