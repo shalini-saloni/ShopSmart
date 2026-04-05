@@ -1,33 +1,28 @@
 const request = require('supertest');
 const app = require('../src/app');
 
-jest.mock('@prisma/client', () => {
-  const mPrismaClient = {
-    product: {
-      findMany: jest.fn(),
-    },
-  };
-  return { PrismaClient: jest.fn(() => mPrismaClient) };
-});
-
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
 describe('Product Routes API tests', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('GET /api/products returns products correctly', async () => {
-    const mockData = [
-      { id: '1', name: 'Shoes', price: 99, bgColor: '#CCC' }
-    ];
-    prisma.product.findMany.mockResolvedValue(mockData);
-
     const res = await request(app).get('/api/products');
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(mockData);
-    expect(prisma.product.findMany).toHaveBeenCalled();
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body[0]).toHaveProperty('id');
+    expect(res.body[0]).toHaveProperty('name');
+    expect(res.body[0]).toHaveProperty('price');
+    expect(res.body[0]).toHaveProperty('category');
+    expect(res.body[0]).toHaveProperty('imageUrl');
+  });
+
+  it('GET /api/products?category=women returns women products', async () => {
+    const res = await request(app).get('/api/products?category=women');
+
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    res.body.forEach(product => {
+      expect(product.category.toLowerCase()).toBe('women');
+    });
   });
 });
