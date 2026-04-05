@@ -24,7 +24,7 @@ export default function Login() {
     <div className="auth-page fade-in">
       <div className="auth-card">
         <h1 className="auth-title">Welcome Back</h1>
-        <p className="auth-subtitle">Sign in to your NS Store account</p>
+        <p className="auth-subtitle">Sign in to your Dresscode account</p>
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />

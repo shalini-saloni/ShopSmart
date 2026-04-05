@@ -25,7 +25,7 @@ export default function Signup() {
     <div className="auth-page fade-in">
       <div className="auth-card">
         <h1 className="auth-title">Create Account</h1>
-        <p className="auth-subtitle">Join NS Store for exclusive access</p>
+        <p className="auth-subtitle">Join Dresscode for exclusive access</p>
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Full name" value={name} onChange={e => setName(e.target.value)} required />

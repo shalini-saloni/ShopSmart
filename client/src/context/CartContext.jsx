@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const { user, token } = useAuth();
   const [cart, setCart] = useState(() => {
     try { return JSON.parse(localStorage.getItem('ns_cart')) || []; } catch { return []; }
   });
@@ -10,8 +12,37 @@ export function CartProvider({ children }) {
     try { return JSON.parse(localStorage.getItem('ns_favs')) || []; } catch { return []; }
   });
 
-  useEffect(() => { localStorage.setItem('ns_cart', JSON.stringify(cart)); }, [cart]);
-  useEffect(() => { localStorage.setItem('ns_favs', JSON.stringify(favorites)); }, [favorites]);
+  useEffect(() => {
+    if (user) {
+      setCart(Array.isArray(user.cart) ? user.cart : []);
+      setFavorites(Array.isArray(user.favorites) ? user.favorites : []);
+    } else {
+      setCart([]);
+      setFavorites([]);
+    }
+  }, [user]);
+
+  useEffect(() => { 
+    localStorage.setItem('ns_cart', JSON.stringify(cart)); 
+    if (user && token) {
+      fetch('/api/auth/sync-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ cart })
+      }).catch(console.error);
+    }
+  }, [cart, user, token]);
+
+  useEffect(() => { 
+    localStorage.setItem('ns_favs', JSON.stringify(favorites)); 
+    if (user && token) {
+      fetch('/api/auth/sync-favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ favorites })
+      }).catch(console.error);
+    }
+  }, [favorites, user, token]);
 
   const addToCart = (product) => {
     setCart(prev => {

@@ -30,7 +30,6 @@ export default function Shop() {
       {/* Sidebar */}
       <aside className="shop-sidebar">
         <div className="sidebar-sticky-content">
-          <div className="sidebar-logo">NS</div>
           <nav className="sidebar-nav">
             <h4>Categories</h4>
             <Link to="/shop" className={!category ? 'active' : ''}>All Items</Link>

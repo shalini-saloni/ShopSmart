@@ -30,11 +30,11 @@ const products = [
   { id: '22', name: 'Tutu Dress', price: 75, category: 'Kids', imageUrl: '/images/kids2.png' },
   { id: '23', name: 'Denim Jacket Jr', price: 65, category: 'Kids', imageUrl: '/images/kids3.png' },
   { id: '24', name: 'Coordinated Set', price: 85, category: 'Kids', imageUrl: '/images/kids4.png' },
-  { id: '25', name: 'Summer Boy Vibe', price: 45, category: 'Kids', imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?w=800&q=80' },
-  { id: '26', name: 'Yellow Raincoat', price: 60, category: 'Kids', imageUrl: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=800&q=80' },
-  { id: '27', name: 'Cool Kid Hat', price: 55, category: 'Kids', imageUrl: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=80' },
-  { id: '28', name: 'Winter Jumper', price: 70, category: 'Kids', imageUrl: 'https://images.unsplash.com/photo-1498075702571-ecb018f3752d?w=800&q=80' },
-  { id: '29', name: 'Little Denim', price: 40, category: 'Kids', imageUrl: 'https://images.unsplash.com/photo-1603513360481-9b16fe2a58b8?w=800&q=80' }
+  { id: '25', name: 'Summer Boy Vibe', price: 45, category: 'Kids', imageUrl: '/images/kids4.png' },
+  { id: '26', name: 'Yellow Raincoat', price: 60, category: 'Kids', imageUrl: '/images/kids2.png' },
+  { id: '27', name: 'Cool Kid Hat', price: 55, category: 'Kids', imageUrl: '/images/kids3.png' },
+  { id: '28', name: 'Winter Jumper', price: 70, category: 'Kids', imageUrl: '/images/kids.png' },
+  { id: '29', name: 'Little Denim', price: 40, category: 'Kids', imageUrl: '/images/kids4.png' }
 ];
 
 router.get('/', (req, res) => {

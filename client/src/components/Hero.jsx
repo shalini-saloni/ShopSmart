@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section className="hero-section animate-on-scroll">
       {/* Background Image Overlay */}
-      <div className="hero-bg" style={{ backgroundImage: 'url(/images/hero.png)' }}></div>
+      <div className="hero-bg" style={{ backgroundImage: 'url(/images/hero_new.jpg)' }}></div>
       <div className="hero-overlay"></div>
 
       {/* Centered White Text */}
