@@ -68,11 +68,18 @@ jobs:
       - name: Install backend dependencies
         run: cd server && npm ci
 
-      - name: Install E2E dependencies
-        run: cd e2e && npm ci
+      - name: Install frontend dependencies
+        run: cd client && npm ci
 
-      - name: Install Playwright browsers
-        run: cd e2e && npx playwright install --with-deps
+      - name: Build frontend
+        run: cd client && npm run build
+
+      - name: Start frontend server
+        run: |
+          cd client
+          npm run preview -- --host 0.0.0.0 --port 4173 &
+          echo $! > /tmp/frontend.pid
+          cd ..
 
       - name: Start backend server
         run: |
@@ -84,7 +91,7 @@ jobs:
       - name: Start frontend server
         run: |
           cd client
-          npm run dev -- --host 0.0.0.0 --port 4173 &
+          npm run preview -- --host 0.0.0.0 --port 4173 &
           echo $! > /tmp/frontend.pid
           cd ..
 
