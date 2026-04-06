@@ -18,17 +18,27 @@ export default function Home() {
       { threshold: 0.15 }
     );
     const els = document.querySelectorAll('.animate-on-scroll');
-    els.forEach(el => observer.observe(el));
-    return () => els.forEach(el => observer.unobserve(el));
+    els.forEach((el) => observer.observe(el));
+    return () => els.forEach((el) => observer.unobserve(el));
   }, []);
 
   return (
     <div className="home-container">
-      <section className="sticky-section z-10"><Hero /></section>
-      <section className="sticky-section z-20"><SummerCarousel /></section>
-      <section className="sticky-section z-30"><CategoryGrid /></section>
-      <section className="sticky-section z-40"><MembershipClub /></section>
-      <section className="footer-wrap"><Footer /></section>
+      <section className="sticky-section z-10">
+        <Hero />
+      </section>
+      <section className="sticky-section z-20">
+        <SummerCarousel />
+      </section>
+      <section className="sticky-section z-30">
+        <CategoryGrid />
+      </section>
+      <section className="sticky-section z-40">
+        <MembershipClub />
+      </section>
+      <section className="footer-wrap">
+        <Footer />
+      </section>
     </div>
   );
 }

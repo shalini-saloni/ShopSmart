@@ -12,7 +12,7 @@ test('NS Store Multi-Page Routing empty image flow', async ({ page }) => {
   // Click Shop All and wait for navigation
   await page.click('text=SHOP ALL');
   await page.waitForURL('**/shop');
-  
+
   // Verify dynamic route renders "Shop All" title
   await expect(page.locator('.shop-title')).toContainText('Shop All');
 

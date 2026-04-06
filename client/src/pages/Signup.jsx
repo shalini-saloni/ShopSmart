@@ -28,12 +28,35 @@ export default function Signup() {
         <p className="auth-subtitle">Join Dresscode for exclusive access</p>
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Full name" value={name} onChange={e => setName(e.target.value)} required />
-          <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password (min 6 characters)" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />
-          <button type="submit" className="auth-submit">Create Account</button>
+          <input
+            type="text"
+            placeholder="Full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password (min 6 characters)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          <button type="submit" className="auth-submit">
+            Create Account
+          </button>
         </form>
-        <p className="auth-footer">Already have an account? <Link to="/login">Sign in</Link></p>
+        <p className="auth-footer">
+          Already have an account? <Link to="/login">Sign in</Link>
+        </p>
       </div>
     </div>
   );

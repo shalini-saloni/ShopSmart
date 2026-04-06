@@ -2,10 +2,30 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
-const SearchIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>;
-const HeartIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>;
-const UserIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>;
-const CartIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>;
+const SearchIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+);
+const HeartIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+const UserIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+const CartIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="9" cy="21" r="1" />
+    <circle cx="20" cy="21" r="1" />
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+  </svg>
+);
 
 export default function Header() {
   const { cartCount, favorites } = useCart();
@@ -14,7 +34,12 @@ export default function Header() {
   return (
     <header className="header container">
       <Link to="/" className="logo">
-        <img src="/images/dresscode-logo.svg" alt="Dresscode" style={{ height: '35px' }} className="logo-svg" />
+        <img
+          src="/images/dresscode-logo.svg"
+          alt="Dresscode"
+          style={{ height: '35px' }}
+          className="logo-svg"
+        />
       </Link>
       <nav className="nav-links">
         <Link to="/shop/women">WOMEN</Link>
@@ -23,19 +48,47 @@ export default function Header() {
         <Link to="/shop">SHOP ALL</Link>
       </nav>
       <div className="nav-icons" style={{ color: '#000' }}>
-        <span><SearchIcon /></span>
+        <span>
+          <SearchIcon />
+        </span>
         <Link to="/favorites" style={{ color: 'inherit', position: 'relative' }}>
           <HeartIcon />
           {favorites.length > 0 && <span className="badge">{favorites.length}</span>}
         </Link>
-        <Link to="/cart" style={{ color: 'inherit', textDecoration: 'none', position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <Link
+          to="/cart"
+          style={{
+            color: 'inherit',
+            textDecoration: 'none',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           <CartIcon />
           {cartCount > 0 && <span className="badge">{cartCount}</span>}
         </Link>
         {user ? (
-          <span onClick={logout} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} title="Logout"><UserIcon /></span>
+          <span
+            onClick={logout}
+            style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            title="Logout"
+          >
+            <UserIcon />
+          </span>
         ) : (
-          <Link to="/login" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center' }} title="Login"><UserIcon /></Link>
+          <Link
+            to="/login"
+            style={{
+              color: 'inherit',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            title="Login"
+          >
+            <UserIcon />
+          </Link>
         )}
       </div>
     </header>

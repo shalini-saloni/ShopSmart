@@ -27,11 +27,27 @@ export default function Login() {
         <p className="auth-subtitle">Sign in to your Dresscode account</p>
         {error && <div className="auth-error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-          <button type="submit" className="auth-submit">Sign In</button>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="auth-submit">
+            Sign In
+          </button>
         </form>
-        <p className="auth-footer">Don&apos;t have an account? <Link to="/signup">Create one</Link></p>
+        <p className="auth-footer">
+          Don&apos;t have an account? <Link to="/signup">Create one</Link>
+        </p>
       </div>
     </div>
   );

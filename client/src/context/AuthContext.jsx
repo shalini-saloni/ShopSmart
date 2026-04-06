@@ -9,16 +9,20 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (token) {
       fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } })
-        .then(r => r.ok ? r.json() : Promise.reject())
-        .then(d => setUser(d.user))
-        .catch(() => { setToken(null); localStorage.removeItem('ns_token'); });
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((d) => setUser(d.user))
+        .catch(() => {
+          setToken(null);
+          localStorage.removeItem('ns_token');
+        });
     }
   }, [token]);
 
   const login = async (email, password) => {
     const res = await fetch('/api/auth/login', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
@@ -30,8 +34,9 @@ export function AuthProvider({ children }) {
 
   const signup = async (name, email, password) => {
     const res = await fetch('/api/auth/signup', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);

@@ -13,8 +13,11 @@ export default function Shop() {
     setLoading(true);
     const qs = category ? `?category=${category}` : '';
     fetch(`/api/products${qs}`)
-      .then(res => res.json())
-      .then(data => { setProducts(data); setLoading(false); })
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [category]);
 
@@ -32,16 +35,41 @@ export default function Shop() {
         <div className="sidebar-sticky-content">
           <nav className="sidebar-nav">
             <h4>Categories</h4>
-            <Link to="/shop" className={!category ? 'active' : ''}>All Items</Link>
-            <Link to="/shop/women" className={category === 'women' ? 'active' : ''}>Women</Link>
-            <Link to="/shop/men" className={category === 'men' ? 'active' : ''}>Men</Link>
-            <Link to="/shop/kids" className={category === 'kids' ? 'active' : ''}>Kids</Link>
+            <Link to="/shop" className={!category ? 'active' : ''}>
+              All Items
+            </Link>
+            <Link to="/shop/women" className={category === 'women' ? 'active' : ''}>
+              Women
+            </Link>
+            <Link to="/shop/men" className={category === 'men' ? 'active' : ''}>
+              Men
+            </Link>
+            <Link to="/shop/kids" className={category === 'kids' ? 'active' : ''}>
+              Kids
+            </Link>
 
             <h4>Sort By</h4>
-            <button onClick={() => setSortBy('default')} className={sortBy === 'default' ? 'active' : ''}>Default</button>
-            <button onClick={() => setSortBy('price-asc')} className={sortBy === 'price-asc' ? 'active' : ''}>Price: Low to High</button>
-            <button onClick={() => setSortBy('price-desc')} className={sortBy === 'price-desc' ? 'active' : ''}>Price: High to Low</button>
-            <button onClick={() => setSortBy('name')} className={sortBy === 'name' ? 'active' : ''}>Name A-Z</button>
+            <button
+              onClick={() => setSortBy('default')}
+              className={sortBy === 'default' ? 'active' : ''}
+            >
+              Default
+            </button>
+            <button
+              onClick={() => setSortBy('price-asc')}
+              className={sortBy === 'price-asc' ? 'active' : ''}
+            >
+              Price: Low to High
+            </button>
+            <button
+              onClick={() => setSortBy('price-desc')}
+              className={sortBy === 'price-desc' ? 'active' : ''}
+            >
+              Price: High to Low
+            </button>
+            <button onClick={() => setSortBy('name')} className={sortBy === 'name' ? 'active' : ''}>
+              Name A-Z
+            </button>
           </nav>
         </div>
       </aside>
@@ -54,10 +82,21 @@ export default function Shop() {
         </header>
 
         {loading ? (
-          <p style={{ textAlign: 'center', fontFamily: 'var(--font-serif)', fontSize: '1.5rem', padding: '4rem' }}>Loading...</p>
+          <p
+            style={{
+              textAlign: 'center',
+              fontFamily: 'var(--font-serif)',
+              fontSize: '1.5rem',
+              padding: '4rem',
+            }}
+          >
+            Loading...
+          </p>
         ) : (
           <div className="product-grid">
-            {sorted.map(p => <ProductCard key={p.id} product={p} />)}
+            {sorted.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         )}
       </main>
