@@ -68,11 +68,11 @@ jobs:
       - name: Install backend dependencies
         run: cd server && npm ci
 
-      - name: Install frontend dependencies
-        run: cd client && npm ci
+      - name: Install E2E dependencies
+        run: cd e2e && npm ci
 
       - name: Install Playwright browsers
-        run: cd client && npx playwright install --with-deps
+        run: cd e2e && npx playwright install --with-deps
 
       - name: Start backend server
         run: |
@@ -95,5 +95,5 @@ jobs:
 
       - name: Run end-to-end tests
         run: |
-          cd client
-          npm run test:e2e
+          cd e2e
+          npx playwright test --config=playwright.config.js
