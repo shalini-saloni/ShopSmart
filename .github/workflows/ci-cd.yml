@@ -81,6 +81,13 @@ jobs:
           echo $! > /tmp/backend.pid
           cd ..
 
+      - name: Start frontend server
+        run: |
+          cd client
+          npm run dev -- --host 0.0.0.0 --port 4173 &
+          echo $! > /tmp/frontend.pid
+          cd ..
+
       - name: Wait for backend readiness
         run: |
           for i in $(seq 1 30); do
@@ -91,6 +98,18 @@ jobs:
             sleep 2
           done
           echo "Backend did not become ready in time"
+          exit 1
+
+      - name: Wait for frontend readiness
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsSL http://127.0.0.1:4173 >/dev/null 2>&1; then
+              echo "Frontend ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Frontend did not become ready in time"
           exit 1
 
       - name: Run end-to-end tests
