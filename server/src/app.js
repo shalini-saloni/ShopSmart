@@ -9,7 +9,11 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'ShopSmart Backend is running', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    message: 'ShopSmart Backend is running',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.use('/api/products', productRoutes);
