@@ -7,28 +7,42 @@ on:
 
 jobs:
   deploy:
-    if: ${{ secrets.EC2_HOST != '' && secrets.EC2_USER != '' && secrets.EC2_DEPLOY_PATH != '' && (secrets.EC2_SSH_PRIVATE_KEY != '' || secrets.SSH_PRIVATE_KEY != '') }}
     name: Deploy to AWS EC2
     runs-on: ubuntu-latest
+    env:
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+      EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
+      EC2_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check EC2 secret availability
+        if: ${{ env.EC2_HOST == '' || env.EC2_USER == '' || env.EC2_DEPLOY_PATH == '' || (env.EC2_SSH_PRIVATE_KEY == '' && env.SSH_PRIVATE_KEY == '') }}
+        run: |
+          echo "Skipping EC2 deployment because one or more secrets are missing."
+          echo "Required: EC2_HOST, EC2_USER, EC2_DEPLOY_PATH, and either EC2_SSH_PRIVATE_KEY or SSH_PRIVATE_KEY."
+
       - name: Set up SSH agent
+        if: ${{ env.EC2_HOST != '' && env.EC2_USER != '' && env.EC2_DEPLOY_PATH != '' && (env.EC2_SSH_PRIVATE_KEY != '' || env.SSH_PRIVATE_KEY != '') }}
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY || secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ env.EC2_SSH_PRIVATE_KEY || env.SSH_PRIVATE_KEY }}
 
       - name: Sync repository to EC2
+        if: ${{ env.EC2_HOST != '' && env.EC2_USER != '' && env.EC2_DEPLOY_PATH != '' && (env.EC2_SSH_PRIVATE_KEY != '' || env.SSH_PRIVATE_KEY != '') }}
         run: |
           rsync -az --delete --exclude='.git' --exclude='node_modules' --exclude='.github' ./ \
-            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.EC2_DEPLOY_PATH }}
+            ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:${{ env.EC2_DEPLOY_PATH }}
 
       - name: Run remote deploy script
+        if: ${{ env.EC2_HOST != '' && env.EC2_USER != '' && env.EC2_DEPLOY_PATH != '' && (env.EC2_SSH_PRIVATE_KEY != '' || env.SSH_PRIVATE_KEY != '') }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} <<'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_HOST }} <<'EOF'
             set -e
-            export DEPLOY_PATH="${{ secrets.EC2_DEPLOY_PATH }}"
+            export DEPLOY_PATH="${{ env.EC2_DEPLOY_PATH }}"
             cd "${DEPLOY_PATH}"
             chmod +x scripts/deploy.sh
             ./scripts/deploy.sh

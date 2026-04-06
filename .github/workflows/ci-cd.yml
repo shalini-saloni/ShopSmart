@@ -84,7 +84,7 @@ jobs:
       - name: Wait for backend readiness
         run: |
           for i in $(seq 1 30); do
-            if curl -fsSL http://127.0.0.1:3000/api/health >/dev/null 2>&1; then
+            if curl -fsSL http://127.0.0.1:5001/api/health >/dev/null 2>&1; then
               echo "Backend ready"
               exit 0
             fi
