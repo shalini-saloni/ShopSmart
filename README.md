@@ -197,7 +197,6 @@ This repository includes automated validation and deployment pipelines:
   - runs backend and frontend unit tests
   - runs ESLint and Prettier checks
   - builds the frontend bundle
-  - executes Playwright end-to-end tests
 
 - `.github/workflows/deploy-ec2.yml`
   - triggers on `push` to `main` and manual dispatch
