@@ -10,7 +10,7 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx}\" \"../e2e/**/*.js\"",
     "preview": "vite preview",
     "test": "vitest",
-    "test:e2e": "cd ../e2e && npx playwright test --config=playwright.config.js"
+    "test:e2e": "cd ../e2e && ./node_modules/.bin/playwright test --config=playwright.config.js"
   },
   "dependencies": {
     "react": "^18.2.0",
