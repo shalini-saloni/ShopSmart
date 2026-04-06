@@ -13,10 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate EC2 deployment secrets
+        run: |
+          if [ -z "${{ secrets.EC2_HOST }}" ] || [ -z "${{ secrets.EC2_USER }}" ] || [ -z "${{ secrets.EC2_DEPLOY_PATH }}" ] || (
+            [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ] && [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]
+          ); then
+            echo "Missing required EC2 secrets. Please add EC2_HOST, EC2_USER, EC2_DEPLOY_PATH, and either EC2_SSH_PRIVATE_KEY or SSH_PRIVATE_KEY."
+            exit 1
+          fi
+        shell: bash
+
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY || secrets.SSH_PRIVATE_KEY }}
 
       - name: Sync repository to EC2
         run: |
