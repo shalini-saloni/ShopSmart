@@ -2,7 +2,7 @@
 # Idempotent Deployment Script for ShopSmart
 set -e
 
-APP_DIR="$HOME/projects/shopsmart"
+APP_DIR="${DEPLOY_PATH:-$HOME/projects/shopsmart}"
 
 echo "Deploying ShopSmart to $APP_DIR"
 mkdir -p "$APP_DIR/client"

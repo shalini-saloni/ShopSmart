@@ -187,6 +187,39 @@ Or use Vercel Dashboard:
 3. Add environment variable: `VITE_API_URL`
 4. Deploy
 
+## CI/CD and Deployment
+
+This repository includes automated validation and deployment pipelines:
+
+- `.github/workflows/ci-cd.yml`
+  - triggers on `push` and `pull_request` for `main` and `develop`
+  - installs dependencies for both backend and frontend
+  - runs backend and frontend unit tests
+  - runs ESLint and Prettier checks
+  - builds the frontend bundle
+  - executes Playwright end-to-end tests
+
+- `.github/workflows/deploy-ec2.yml`
+  - triggers on `push` to `main` and manual dispatch
+  - syncs code to an EC2 host via SSH
+  - runs the idempotent deploy script at `scripts/deploy.sh`
+  - uses `mkdir -p` to safely create the target deployment path
+
+- `dependabot.yml`
+  - checks npm dependencies daily for `/server` and `/client`
+  - opens update pull requests automatically
+
+### AWS EC2 Deployment Notes
+
+Add the following secrets to your GitHub repository before enabling EC2 deployment:
+
+- `EC2_SSH_PRIVATE_KEY`
+- `EC2_HOST`
+- `EC2_USER`
+- `EC2_DEPLOY_PATH`
+
+The EC2 workflow copies the repo contents to the target host and executes `scripts/deploy.sh`, which is designed to be idempotent.
+
 ## Environment Variables
 
 ### Backend

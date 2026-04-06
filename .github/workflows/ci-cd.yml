@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -8,39 +8,92 @@ on:
 
 jobs:
   backend:
-    name: Backend Tests & Lint
+    name: Backend Tests, Lint & Format
     runs-on: ubuntu-latest
-
-    container:
-      image: node:20
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: cd server && npm ci
 
-      - name: Run tests
-        run: cd server && npm test
-
-      - name: Lint
+      - name: Run backend lint
         run: cd server && npm run lint
 
-  frontend:
-    name: Frontend Tests & Build
-    runs-on: ubuntu-latest
+      - name: Run backend Prettier check
+        run: cd server && npm run format:check
 
-    container:
-      image: node:20
+      - name: Run backend tests
+        run: cd server && npm test
+
+  frontend:
+    name: Frontend Tests, Lint, Format & Build
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: cd client && npm ci
 
-      - name: Run tests
+      - name: Run frontend lint
+        run: cd client && npm run lint
+
+      - name: Run frontend Prettier check
+        run: cd client && npm run format:check
+
+      - name: Run frontend unit tests
         run: cd client && npm test -- --run
 
-      - name: Build
+      - name: Build frontend
         run: cd client && npm run build
+
+  e2e:
+    name: End-to-End Tests
+    needs: [ backend, frontend ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies
+        run: cd server && npm ci
+
+      - name: Install frontend dependencies
+        run: cd client && npm ci
+
+      - name: Install Playwright browsers
+        run: cd client && npx playwright install --with-deps
+
+      - name: Start backend server
+        run: |
+          cd server
+          npm start &
+          echo $! > /tmp/backend.pid
+          cd ..
+
+      - name: Wait for backend readiness
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsSL http://127.0.0.1:3000/api/health >/dev/null 2>&1; then
+              echo "Backend ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend did not become ready in time"
+          exit 1
+
+      - name: Run end-to-end tests
+        run: |
+          cd client
+          npm run test:e2e
