@@ -1,2 +1,11 @@
 node_modules
+npm-debug.log
+.env
 Dockerfile
+.git
+.github
+dist
+build
+.prisma
+dev.db
+dev.db-journal

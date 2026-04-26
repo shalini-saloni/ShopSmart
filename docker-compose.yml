@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./server
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - sqlite_data:/app/prisma
+    environment:
+      - PORT=5001
+      - DATABASE_URL=file:./prisma/dev.db
+    restart: always
+
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - VITE_PROXY_TARGET=http://backend:5001
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  sqlite_data:
