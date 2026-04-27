@@ -1,7 +1,9 @@
 services:
   backend:
     build:
-      context: ./server
+      context: .
+      dockerfile: Dockerfile
+      target: backend
     ports:
       - "5001:5001"
     volumes:
@@ -15,7 +17,9 @@ services:
 
   frontend:
     build:
-      context: ./client
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
     ports:
       - "5173:5173"
     volumes:
